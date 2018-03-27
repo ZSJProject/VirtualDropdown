@@ -1,0 +1,127 @@
+$defualtHeight: 2rem;
+    
+vs-dropdown{
+    display: block;
+    position: relative;
+    border: #e0e0e0 solid 1px;
+    background-color: white;
+    font-size: 0.8rem;
+    width: 100%;
+}
+
+.vd-selection-group{
+    display: flex;
+    position: relative;
+    width: 100%;
+    height: 1.5rem;
+
+    .vd-overlay-wrap, .vd-selection{
+        width: 100%;
+    }
+
+    .vd-overlay{
+        .vd-overlay-title{
+            height: 1.5rem;
+            .vd-overlay-title-text{
+                height: 100%;
+                width: 100%;
+            }
+        }
+        .vd-items{
+            background-color: white;
+            border: #e0e0e0 solid 1px;
+        }
+    }
+
+    .vd-btn-selections{
+        display: flex;
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding-right: 1rem;
+        height: 1.5rem;
+    }
+
+    .vd-selection, .vd-overlay-title-text{
+        margin-right: $defualtHeight;
+        display: flex;
+        padding: 0 1rem;
+        align-items: center;
+    }
+}
+
+.vd-items{
+    max-width: 100%;
+    max-height: 15rem;
+    overflow-y: auto;
+    list-style: none;
+    margin: 0!important;
+    padding: 0!important;
+
+    .vd-item{
+        height: $defualtHeight;
+        padding: 0 1rem;
+
+        &.vd-selected{
+            background-color: rgba(224, 224, 224, 0.60);
+        }
+
+        &:hover{
+            background-color: rgba(224, 224, 224, 0.20);
+        }
+
+        .vd-item-content{
+            display: flex;
+            height: $defualtHeight;
+
+            .vd-item-text-wrap{
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+                .vd-item-text{
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    white-space: nowrap;
+                }
+            }
+
+            .vd-delete-btn{
+                width: $defualtHeight;
+                height: $defualtHeight;
+                padding-left: $defualtHeight / 2;
+            }
+        }
+    }
+}
+
+.vd-selector{
+    position: absolute;
+    width: 100%;
+    background-color: white;
+    border: #e0e0e0 solid 1px;
+    z-index: 100;
+}
+
+.vd-filter-group{
+    display: flex;
+    white-space: nowrap;
+    border-bottom: #e0e0e0 solid 1px;
+    padding: 0.5rem 1rem;
+    input{
+        width: 100%;
+        border: none;
+    }
+}
+
+.vd-counter{
+    display: inline-block;
+    margin-left: 0.3125rem;
+    padding: 0.125rem 0.3125rem;
+    color: #808080;
+    font-size: 0.625rem;
+    font-weight: 600;
+    line-height: 1;
+    border-radius: 1.25rem;
+    background-color: #eaeaea;
+}

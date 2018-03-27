@@ -1,0 +1,22 @@
+.vd-overlay
+    .vd-overlay-title
+        span.vd-overlay-title-text(ng-click='vdCtrl.toggleSelector()') {{vdCtrl.options.view.overlayText}}
+    .vd-items(vs-repeat='{{vdCtrl.options.itemHeight}}')
+        .vd-item.vd-selected-item.vd-selected-item-color(
+            ng-click='$event.stopPropagation()', 
+            ng-repeat='item in selectedItems track by $index'
+        )
+            .vd-item-content
+                .vd-properties-btn(
+                    ng-if='vdCtrl.isObject(item)'
+                )
+                    span.icon.vd-icon-properties(
+                        ng-class='vsddPopoverCtrl.popover !== null ? "icon-down" : "icon-right"'
+                        ng-click='vsddPopoverCtrl.showProperties($event)'
+                        ng-keydown='$event.which === 13 ? vsddPopoverCtrl.showProperties($event) : null'
+                        vd-popover=''
+                    )
+                .vd-item-text-wrap
+                    .vd-item-text {{vdCtrl.getPropertyValue(vdCtrl.visiblePropName, item)}}
+                    .vd-delete-btn(ng-click='vdCtrl.removeItem($index, $event)')
+                        span(svg-kit='GENERAL_NEGATIVE' w='1rem' h='1rem')

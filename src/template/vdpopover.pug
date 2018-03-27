@@ -1,0 +1,8 @@
+.vd-popover
+    table.vd-properties(ng-click='vdPopoverCtrl.closeProperties($event);')
+        tr
+            th {{vdCtrl.options.view.propertyTitle}}
+            th {{vdCtrl.options.view.valueTitle}}
+        tr(ng-repeat='property in vdCtrl.getViewProperties() track by $index')
+            td {{property}}
+            td {{vdCtrl.getPropertyValue(property, item)}}

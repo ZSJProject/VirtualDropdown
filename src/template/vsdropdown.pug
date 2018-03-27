@@ -1,0 +1,52 @@
+.vs-dropdown(
+    ng-click='$event.stopPropagation()'
+    off-click='vdCtrl.closeAll()' off-click-if='vdCtrl.showSelector || vdCtrl.showOverlay'
+)
+    .vd-selection-group
+        .vd-overlay-wrap(ng-if='vdCtrl.showOverlay && selectedItems.length > 0')
+            include ./vdoverlay.pug
+        .vd-selection(
+            ng-show='!vdCtrl.showOverlay'
+            ng-click='vdCtrl.toggleSelector()'
+            ng-bind-html='vdCtrl.getSelectText(selectedItems)'
+        )
+        button.vd-btn-selections(
+            ng-click='selectedItems.length > 0 && vdCtrl.toggleOverlay()'
+        )
+            span.vd-selection-count.vd-counter {{selectedItems.length || '0'}}
+    .vd-selector(ng-show='vdCtrl.showSelector')
+        .vd-filter-group(
+            ng-class='vdCtrl.filterdItems.length ? "vs-hits-filter" : "vs-nohits-filter"'
+            ng-show='vdCtrl.options.filter.enabled'
+        )
+            input.vd-filter-input(
+                kr-input='filterText'
+                type='text' 
+                placeholder='{{vdCtrl.options.filter.filterPlaceholderTxt}}'
+            )
+            .vd-filter-match
+                span.vd-filter-match-text.vd-counter {{vdCtrl.filterdItems.length || '0'}}
+            .vd-icon-filter-clear(ng-show='filterText.length > 0')
+                span.icon.vd-icon-clear.icon-clear(
+                    ng-click='clearFilter()' 
+                    ng-keydown='$event.which === 13 ? clearFilter() : null' 
+                    tabindex='0'
+                )
+        ul.vd-items(vs-repeat='{{vdCtrl.options.itemHeight}}')
+            li.vd-item(
+                ng-class='{"vd-selected" : vdCtrl.isItemSelected(item)}'
+                ng-click='vdCtrl.itemClicked(item, $index, $event)'
+                ng-repeat='item in vdCtrl.filterdItems track by $index'
+            )
+                .vd-item-content
+                    .vd-properties-btn(
+                        ng-if='vdCtrl.isObject(item)'
+                    )
+                        span.icon.vd-icon-properties(
+                            ng-class='vsddPopoverCtrl.popover !== null ? "icon-down" : "icon-right"'
+                            ng-click='vsddPopoverCtrl.showProperties($event)'
+                            ng-keydown='$event.which === 13 ? vsddPopoverCtrl.showProperties($event) : null'
+                            vd-popover=''
+                        )
+                    .vd-item-text-wrap
+                        .vd-item-text {{vdCtrl.getPropertyValue(vdCtrl.visiblePropName, item)}}

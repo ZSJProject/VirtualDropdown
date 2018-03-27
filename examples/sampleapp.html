@@ -5,17 +5,14 @@
     <title>vsdropdown - virtual scroll dropdown</title>
 
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js"></script>
-
-    <link href="../dist/min/vsdropdown-0.1.1.min.css" rel="stylesheet" type="text/css"/>
-    <script src="../dist/min/vsdropdown-0.1.1.min.js" type="text/javascript"></script>
-
-    <!--
-    <link href="../dist/debug/vsdropdown-0.1.1.css" rel="stylesheet" type="text/css"/>
-    <script src="../dist/debug/vsdropdown-0.1.1.js" type="text/javascript"></script>
-    -->
-
-    <link href="sampleapp.css" rel="stylesheet" type="text/css">
-    <script src="sampleapp.js" type="text/javascript"></script>
+    <script src="./examples/dep.js" type="text/javascript"></script>
+    <script src="./examples/throttle.js" type="text/javascript"></script>
+    <script src="./examples/vsrepeat.js" type="text/javascript"></script>
+    <script src="./examples/krinput.js" type="text/javascript"></script>
+    <script src="./dist/vsdropdown.js" type="text/javascript"></script>
+    <link href="./dist/vsdropdown.css" rel="stylesheet" type="text/css">
+    <link href="./examples/sampleapp.css" rel="stylesheet" type="text/css">
+    <script src="./examples/sampleapp.js" type="text/javascript"></script>
 </head>
 
 <body ng-app="sampleapp">
@@ -33,23 +30,6 @@
         <li>Tooltips enabled to show long item texts</li>
     </ul>
 
-    <vsdropdown options="opt"></vsdropdown>
+    <vs-dropdown items='items' selected-items='selectedItems' options='opt'></vs-dropdown>
 
 </div>
-
-<div ng-controller="sampleappctrl2" style="margin-bottom: 200px">
-
-    <h5>Example 2. Single selection</h5>
-    <ul>
-        <li>Object array as input</li>
-        <li>No selection</li>
-        <li>101 items</li>
-        <li>Properties enabled to show all selected properties of the item</li>
-    </ul>
-
-    <vsdropdown options="opt"></vsdropdown>
-
-</div>
-</body>
-
-</html>
