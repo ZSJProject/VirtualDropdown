@@ -58,6 +58,7 @@ module.exports = ['$parse', 'throttle', function ($parse, throttle) {
                 vdCtrl.filtering();
                 if(scrollContent) scrollContent.scrollTop = 0;
             }, 30));
+            
             scope.$watch('selectedItems', initSelectedItems);
             scope.$watch('options', vdCtrl.applyOptions);
 
@@ -171,12 +172,13 @@ module.exports = ['$parse', 'throttle', function ($parse, throttle) {
                         if(self.showOverlay && self.showSelector) self.showSelector = false;
                     },
                     itemClicked: function (item, index, event) {
-                        var options = self.options || {multiple: 1};
+                        var _index = self.IndexofItemSelected(item),
+                            options = self.options || {multiple: 1};
     
-                        if (!self.isItemSelected(item)) {
+                        if (_index === -1) {
                             self.addItem(item, event);
                         }else {
-                            self.removeItem($scope.selectedItems.indexOf(item), event);
+                            self.removeItem(_index, event);
                         }
     
                         if(options.multiple === 1) {
@@ -216,19 +218,40 @@ module.exports = ['$parse', 'throttle', function ($parse, throttle) {
                         notifyParent(item, vdConfig.OPERATION_DEL);
                     },
                     isItemSelected: function (item) {
-                        return $scope.selectedItems.indexOf(item) !== -1;
+                        return self.IndexofItemSelected(item) !== -1;
+                    },
+                    IndexofItemSelected: function (item) {
+                        var options = self.options,
+                            selectedItems = $scope.selectedItems;
+
+                        if(typeof item === 'object'){
+                            var objectCompare = options.objectCompare;
+                            
+                            if(typeof objectCompare === 'function'){
+                                for(var idx=0;idx< selectedItems.length;idx++){
+                                    if(objectCompare(selectedItems[idx], item)) return idx;
+                                }
+
+                                return -1;
+                            }
+                        }
+
+                        return $scope.selectedItems.indexOf(item);
                     },
                     getPropertyValue: function (prop, item) {
-                        var returned;
+                        var returned,
+                            isObject = (typeof item === 'object');
 
                         if(self.options && typeof self.options.makeItemText === 'function'){
                             returned = self.options.makeItemText(item);
                         }else if (prop == null) {
                             returned = item;
-                        }else if (prop.indexOf(vdConfig.DOT_SEPARATOR) === -1) {
-                            returned = item[prop];
-                        }else{
-                            returned = processNestedObject(prop, item);
+                        }else if(isObject){
+                            if(prop.indexOf(vdConfig.DOT_SEPARATOR) === -1){
+                                returned = item[prop];
+                            }else{
+                                returned = processNestedObject(prop, item);
+                            }
                         }
     
                         return returned || '알 수 없음';
