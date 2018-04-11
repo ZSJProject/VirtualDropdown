@@ -35,6 +35,7 @@ module.exports = ['$parse', 'throttle', function ($parse, throttle) {
         controllerAs: 'vdCtrl',
         link: function (scope, element, attrs, ctrls) {
             var vdCtrl = ctrls[0] || {},
+                dropdown = element[0].querySelector('.vs-dropdown'),
                 scrollContent = element[0].querySelector('.vd-items');
 
             function initSelectedItems(){
@@ -53,6 +54,28 @@ module.exports = ['$parse', 'throttle', function ($parse, throttle) {
             vdCtrl.applyItems(attrs.items);
 
             scope.filterText = '';
+            scope.getSelectorPosition = function(){
+                var rect = dropdown.getBoundingClientRect(),
+                    remainBottom = window.innerHeight - rect.y,
+                    remainTop = rect.y;
+
+                if(230 < remainBottom){
+                    scrollContent.style.maxHeight = 160 + 'px';
+                    scope.selectorPosition = 'bottom';
+                }else if(230 < remainTop){
+                    scrollContent.style.maxHeight = 160 + 'px';
+                    scope.selectorPosition = 'top';
+                }else if(150 < remainBottom){
+                    scrollContent.style.maxHeight = 80 + 'px';
+                    scope.selectorPosition = 'bottom';
+                }else if(150 < remainTop){
+                    scrollContent.style.maxHeight = 80 + 'px';
+                    scope.selectorPosition = 'top';
+                }else{
+                    scrollContent.style.maxHeight = remainBottom + 'px';
+                    scope.selectorPosition = 'bottom';
+                }
+            }
 
             scope.$watch('filterText', throttle(function(){
                 vdCtrl.filtering();
@@ -68,12 +91,19 @@ module.exports = ['$parse', 'throttle', function ($parse, throttle) {
             });
         },
         controller: [
-            '$scope', '$filter','vdConfig', 
-            function ($scope, $filter, vdConfig) {
+            '$scope', '$filter', '$window', 'vdConfig', 
+            function ($scope, $filter, $window, vdConfig) {
                 var self = this,
                     itemsGetter;
 
-                this.options = {};
+                this.options = Object.assign(
+                    {}, 
+                    vdConfig.BASIC_OPTION,
+                    {
+                        view: Object.assign({}, vdConfig.BASIC_VIEW),
+                        filter: Object.assign({}, vdConfig.BASIC_FILTER)
+                    }
+                );
                 this.filterdItems = [];
                 this.showOverlay = false;
                 this.showSelector = false;
@@ -152,6 +182,17 @@ module.exports = ['$parse', 'throttle', function ($parse, throttle) {
                                 )
                         }
                     },
+                    useAllSelect: function(){
+                        var options = self.options || {multiple: 1};
+
+                        return (options.multiple > 1) && 
+                            (self.filterdItems.length < vdConfig.ALL_SELECT_LIMIT);
+                    },
+                    isAllSelected: function(){
+                        var options = self.options || {multiple: 1};
+
+                        return Math.min(self.filterdItems.length, options.multiple) <= $scope.selectedItems.length;
+                    },
                     isObject: function(item){
                         return (typeof item === 'object');
                     },
@@ -162,6 +203,10 @@ module.exports = ['$parse', 'throttle', function ($parse, throttle) {
                     toggleSelector: function (state) {
                         if(state != null) self.showOverlay = state;
                         else self.showSelector = !self.showSelector;
+
+                        if(self.showSelector){
+                            $scope.getSelectorPosition();
+                        }
 
                         if(self.showSelector && self.showOverlay) self.showOverlay = false;
                     },
@@ -217,6 +262,29 @@ module.exports = ['$parse', 'throttle', function ($parse, throttle) {
     
                         notifyParent(item, vdConfig.OPERATION_DEL);
                     },
+                    toggleAllSelect: function(){
+                        var selectedItems = $scope.selectedItems;
+
+                        if(self.isAllSelected()){
+                            selectedItems.splice(0, selectedItems.length);
+                        }else{
+                            var options = self.options || {multiple: 1},
+                                filterdItems = self.filterdItems,
+                                length = options.multiple - selectedItems.length;
+                                
+                            if(length > 0){
+                                for(var idx=0;idx<filterdItems.length;idx++){
+                                    var item = self.filterdItems[idx];
+
+                                    if(length <= 0) break;
+                                    else if(!self.isItemSelected(item)){
+                                        selectedItems.push(item);
+                                        length--;
+                                    }
+                                }
+                            }
+                        }
+                    },
                     isItemSelected: function (item) {
                         return self.IndexofItemSelected(item) !== -1;
                     },
@@ -239,7 +307,7 @@ module.exports = ['$parse', 'throttle', function ($parse, throttle) {
                         return $scope.selectedItems.indexOf(item);
                     },
                     getPropertyValue: function (prop, item) {
-                        var returned,
+                        var returned = item,
                             isObject = (typeof item === 'object');
 
                         if(self.options && typeof self.options.makeItemText === 'function'){
@@ -297,6 +365,12 @@ module.exports = ['$parse', 'throttle', function ($parse, throttle) {
                     clearFilter: function () {
                         $scope.filterText = '';
                     }
+                });
+
+
+                $window.addEventListener('resize', self.closeAll);
+                $scope.$on('$destroy', function(){
+                    $window.removeEventListener('resize', self.closeAll);
                 });
             }
         ]

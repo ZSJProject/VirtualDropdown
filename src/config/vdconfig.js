@@ -4,13 +4,14 @@
  * @description vsdropdownConfig contain constants and configuration of the vsdropdown
  */
 module.exports = {
+    ALL_SELECT_LIMIT: 20,
     LIST_FOCUS_EVENT: 'vsdropdown.listFocusEvent',
     OPTION_UPDATE_EVENT: 'vsdropdown.listFocusEvent',
     OPERATION_ADD: 'add',
     OPERATION_DEL: 'del',
     DOT_SEPARATOR: '.',
     BASIC_OPTION: {
-        itemHeight: 24,
+        itemHeight: 32,
         multiple: 10,
         showCount: true
     },

@@ -1,4 +1,5 @@
 .vs-dropdown(
+    ng-class='selectorPosition'
     ng-click='$event.stopPropagation()'
     off-click='vdCtrl.closeAll()' off-click-if='vdCtrl.showSelector || vdCtrl.showOverlay'
 )
@@ -10,7 +11,7 @@
             ng-click='vdCtrl.toggleSelector()'
             ng-bind-html='vdCtrl.getSelectText(selectedItems)'
         )
-        button.vd-btn-selections(
+        .vd-btn-selections(
             ng-click='selectedItems.length > 0 && vdCtrl.toggleOverlay()'
         )
             span.vd-selection-count.vd-counter {{selectedItems.length || '0'}}
@@ -19,6 +20,11 @@
             ng-class='vdCtrl.filterdItems.length ? "vs-hits-filter" : "vs-nohits-filter"'
             ng-show='vdCtrl.options.filter.enabled'
         )
+            .vd-check-btn(
+                ng-disabled='!vdCtrl.useAllSelect()'
+                ng-selected='vdCtrl.isAllSelected()'
+                ng-click='vdCtrl.toggleAllSelect()'
+            )
             input.vd-filter-input(
                 kr-input='filterText'
                 type='text' 
@@ -32,13 +38,15 @@
                     ng-keydown='$event.which === 13 ? clearFilter() : null' 
                     tabindex='0'
                 )
-        ul.vd-items(vs-repeat='{{vdCtrl.options.itemHeight}}')
-            li.vd-item(
-                ng-class='{"vd-selected" : vdCtrl.isItemSelected(item)}'
-                ng-click='vdCtrl.itemClicked(item, $index, $event)'
+        s-content.vd-items(vs-repeat='{{vdCtrl.options.itemHeight}}')
+            .vd-item(
                 ng-repeat='item in vdCtrl.filterdItems track by $index'
+                ng-click='vdCtrl.itemClicked(item, $index, $event)'
             )
                 .vd-item-content
+                    .vd-check-btn(
+                        ng-selected='vdCtrl.isItemSelected(item)'
+                    )
                     .vd-properties-btn(
                         ng-if='vdCtrl.isObject(item)'
                     )
