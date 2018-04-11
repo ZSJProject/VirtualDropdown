@@ -12,8 +12,69 @@ var sampleapp = angular.module('sampleapp', ['kr-input', 'vs-repeat','throttle',
  */
 sampleapp.controller('sampleappctrl1', function ($scope) {
 
-    var items = $scope.items = [],
-        selectedItems = $scope.selectedItems = [];
+    $scope.selectedItems = [];
+    $scope.items = [{
+                "id": "a0",
+                "children": 0,
+                "caption": "전국",
+                "list": null
+            },
+            {
+                "id": "a1",
+                "children": 1,
+                "caption": "서울",
+            },
+            {
+                "id": "a101",
+                "parent": "a1",
+                "children": 6,
+                "caption": "소계(도심지역)"
+            },
+            {
+                "id": "a10101",
+                "parent": "a101",
+                "children": 0,
+                "caption": "광화문",
+                "list": null
+            },
+            {
+                "id": "a10102",
+                "parent": "a101",
+                "children": 0,
+                "caption": "동대문",
+                "list": null
+            },
+            {
+                "id": "a10103",
+                "parent": "a101",
+                "children": 0,
+                "caption": "명동",
+                "list": null
+            },
+            {
+                "id": "a10104",
+                "parent": "a101",
+                "children": 0,
+                "caption": "서울역",
+                "list": null
+            },
+            {
+                "id": "a10105",
+                "parent": "a101",
+                "children": 0,
+                "caption": "종로",
+                "list": null
+            },
+            {
+                "id": "a10106",
+                "parent": "a101",
+                "children": 0,
+                "caption": "충무로",
+                "list": null
+            }
+        ];
+
+    /*
 
     $scope.$watch('selectedItems', function (newVal, oldVal) {
         if (newVal !== oldVal) {
@@ -40,6 +101,6 @@ sampleapp.controller('sampleappctrl1', function ($scope) {
         // Set selcted item indecies 1 and 9999
         selectedItems.push(items[0]);
         selectedItems.push(items[999]);
-    }
+    }*/
 
 });

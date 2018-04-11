@@ -37,7 +37,7 @@ module.exports = {
     },
     plugins: [
         new webpack.LoaderOptionsPlugin({
-            minimize: false
+            minimize: true
         })
     ]
 };
