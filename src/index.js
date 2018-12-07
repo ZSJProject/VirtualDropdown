@@ -17,8 +17,8 @@ angular.module('vsdropdown', [ 'ngSanitize' ])
             Class: ClassName
         }),
         bindings: {
-            options: '<',
-            items: '<',
+            options: '<', 
+            items: '<',      
             selected: '=',
             onAdd: '&',
             onClick: '&',

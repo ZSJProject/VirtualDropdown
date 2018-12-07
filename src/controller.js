@@ -12,12 +12,12 @@ export const
     ConfigSchema = {
         item: {
             __regexp__: /item/,
-            height: [/^height$/, 32, 'number'],
-            multiple: [/^multiple$/, 10, 'number'],
+            height: [/^height$/, 32, 'number'], //높이
+            multiple: [/^multiple$/, 10, 'number'], //다중선택 갯수
             property: {
                 __regexp__: /property/,
-                key: [/^key$/, null, ['string', 'function_']],
-                value: [/^value|name$/, null, ['string', 'function_']]
+                key: [/^key$/, null, ['string', 'function_']], //아이템이 오브젝트인 경우 비교키
+                value: [/^value|name$/, null, ['string', 'function_']] //아이템이 오브젝트인 경우 표시키
             }
         },
         view: {
@@ -26,9 +26,9 @@ export const
         },
         filter: {
             __regexp__: /filter/,
-            enable: [/^enable$/, true, 'boolean'],
+            enable: [/^enable$/, true, 'boolean'],  
             placeholder: [/^placeholder$/, '필터', 'string'],
-            function: [/^func(tion)?$/, null, 'function']
+            function: [/^func(tion)?$/, null, 'function'] //필터링 함수 사용자 정의(비동기 가능)
         },
         counter: {
             __regexp__: /counter/,
@@ -229,6 +229,8 @@ export default function(
             if(multiple == 1) {
                 this.dialogType = DialogEnum.NONE;
             }
+
+            this.onClick({ $item: item, $index: index, $event: event})
         },
         addItem: function (item, event) {
             var multiple = get(this, 'options.item.multiple') || 10,
