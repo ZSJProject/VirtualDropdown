@@ -13,7 +13,7 @@
 - onClick: '&' ($item, $index, $event)
 - onRemove: '&' ($item, $index, $event)
 - onBottom: '&' ()
-    - test
+    - 이벤트 함수 바인드
 - placeholder: '@'
     - inputbox placeholder
 
