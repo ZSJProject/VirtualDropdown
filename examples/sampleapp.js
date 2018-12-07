@@ -12,6 +12,7 @@ var sampleapp = angular.module('sampleapp', ['kr-input', 'vs-repeat','throttle',
  */
 sampleapp.controller('sampleappctrl1', function ($scope) {
 
+    $scope.opt = {};
     $scope.selectedItems = [];
     $scope.items = [{
                 "id": "a0",

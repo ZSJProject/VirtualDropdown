@@ -1,0 +1,61 @@
+div(
+    class=`${Class.VsDropdown}`
+    click-outside='$ctrl.toggleDialog(DialogEnum.NONE)'
+)
+    .vd-selection-group
+        .vd-selection(
+            ng-click='$ctrl.toggleDialog(DialogEnum.SELECTOR)'
+            ng-bind-html='$ctrl.getSelectText($ctrl.selected)'
+        )
+        .vd-btn-selections(
+            ng-show='$ctrl.options.counter.enable'
+            ng-click='$ctrl.selected.length > 0 && $ctrl.toggleDialog(DialogEnum.OVERLAY)'
+        )
+            span.vd-selection-count.vd-counter {{  $ctrl.selected.length || '0' }}
+    div(
+        class=`${Class.ItemView}` 
+        ng-click='$event.stopPropagation()'
+        ng-show='DialogEnum.NONE != $ctrl.DialogState'
+    )
+        .vd-filter-group(
+            ng-class='$ctrl.filteredItems.length ? "vs-hits-filter" : "vs-nohits-filter"'
+            ng-show='$ctrl.options.filter.enable && ($ctrl.DialogState == DialogEnum.SELECTOR)'
+        )
+            .vd-check-btn(
+                ng-selected='$ctrl.isAllSelected()'
+                ng-click='$ctrl.toggleAllSelect()'
+            )
+            input.vd-filter-input(
+                kr-input='filterText'
+                type='text' 
+                placeholder='{{$ctrl.options.filter.placeholder}}'
+            )
+            .vd-filter-match
+                span.vd-filter-match-text.vd-counter {{ $ctrl.filteredItems.length || '0' }}
+            .vd-icon-filter-clear(ng-show='filterText.length > 0')
+                span.icon.vd-icon-clear.icon-clear(
+                    ng-click='$ctrl.clearFilter()' 
+                    ng-keydown='$event.which === 13 ? $ctrl.clearFilter() : null' 
+                    tabindex='0'
+                )
+        md-progress-linear(ng-show='$ctrl.loading' md-mode='query')
+        .vd-items(vs-repeat='{{$ctrl.options.item.height}}')
+            .vd-item(
+                ng-repeat='item in $ctrl.showItems track by $index'
+                ng-click='$ctrl.clickItem(item, $event)'
+            )
+                .vd-item-content
+                    .vd-check-btn(
+                        ng-show='$ctrl.DialogState == DialogEnum.SELECTOR'
+                        ng-selected='$ctrl.isItemSelected(item)'
+                    )
+                    .vd-properties-btn(
+                        ng-if='$ctrl.isObject(item)'
+                    )
+                    .vd-item-text-wrap
+                        .vd-item-text {{ $ctrl.getPropertyValue(item) }}
+                        .vd-delete-btn(
+                            ng-show='$ctrl.DialogState == DialogEnum.OVERLAY'
+                            ng-click='$ctrl.removeItem($index, $event, item)'
+                        )
+                            span(svg-kit='GENERAL_NEGATIVE' w='1rem' h='1rem')

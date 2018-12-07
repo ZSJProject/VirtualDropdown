@@ -1,11 +1,3 @@
-/*
-    FN  : Throttle.js
-    C   : 2017년 07월 05일 14시 26분 작성
-    DS  : 
-    N   :
-    A   : Mk(barmherzig@mkpowered.pro)
-    L   : 모든 권한은 Mk(barmherzig@mkpowered.pro)에 있습니다.
-*/
 (function(){
     var factory = {
         'throttle': ['$q', '$timeout',
