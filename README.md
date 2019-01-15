@@ -3,6 +3,8 @@
 - [kekeh vsdropdown](https://github.com/kekeh/vsdropdown)를 참고
 - gulp 실행 시 localhost:8888로 서버 열림(gulpfile.js)
 
+![Alt text](example.gif)
+
 ## component bind
 - options: '<'    
     - [옵션 오브젝트](src/controller.js)
